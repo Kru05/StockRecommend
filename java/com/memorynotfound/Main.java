@@ -8,8 +8,12 @@ import java.sql.Statement;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.threeten.bp.LocalDate;
 
 import com.jimmoores.quandl.DataSetRequest;
+import com.jimmoores.quandl.QuandlSession;
+import com.jimmoores.quandl.Row;
+import com.jimmoores.quandl.TabularResult;
 import com.jimmoores.quandl.tablesaw.TableSawQuandlSession;
 
 import tech.tablesaw.api.Table;
@@ -25,7 +29,7 @@ public class Main {
   	   String driver=config.getDriver();
   	  String USER=config.getUsername();
   	 String PASS=config.getPassword();
-        TableSawQuandlSession session = TableSawQuandlSession.create();
+     QuandlSession session = QuandlSession.create("5eXgyoUcjVASEZx5kXf6");
 		Connection conn=null;
 		  Statement stmt = null;
 		  try
@@ -34,33 +38,45 @@ public class Main {
 			  System.out.println("Connectiong to database");
 			  conn=DriverManager.getConnection(DB_URL,USER,PASS);
 			  stmt=conn.createStatement();
+			  stmt.execute("delete from stocks");
 			  ResultSet rs=stmt.executeQuery("select * from company");
 			 
 			  while(rs.next())
-			  {
+			{
+			  	
 				  System.out.println(rs.getString("name"));
 				  String s="NSE/"+rs.getString("code");
 				  System.out.println(s);
-					Table table = session.getDataSet(
-					DataSetRequest.Builder.of(s).withMaxRows(10).build());
-					System.out.println(table);
-					for(int i=0;i<table.rowCount();i++)
-					{
-						String query = "replace into stocks (Code,Date,Open,High,Low,Last,Close,Total_Trade_Quantity,Turnover )"+" values (?,?,?,?,?,?,?,?,?)";
+				  TabularResult tabularResult = session.getDataSet(DataSetRequest.Builder
+				    .of(s).withMaxRows(10)
+				    .build());
+				  System.out.println(tabularResult.toPrettyPrintedString());
+				  for (final Row row : tabularResult) {
+					
+					  LocalDate date = row.getLocalDate("Date");
+					  Double open = row.getDouble("Last");
+					  Double high = row.getDouble("Last");
+					  Double low = row.getDouble("Last");
+					  Double last = row.getDouble("Last");
+					  Double close = row.getDouble("Last");
+					  Double  Total_Trade_Quantity = row.getDouble("Total Trade Quantity");
+					  Double Turnover = row.getDouble("Turnover (Lacs)");
+			
+						String query = "insert into stocks (Code,Date,Open,High,Low,Last,Close,Total_Trade_Quantity,Turnover )"+" values (?,?,?,?,?,?,?,?,?)";
 						  PreparedStatement prep_stmt;
 					      prep_stmt=conn.prepareStatement(query);
 					      prep_stmt.setString(1,rs.getString("code"));
-					      prep_stmt.setString(2,table.get(i, 0));
-					      prep_stmt.setFloat(3,Float.parseFloat(table.get(i, 1)));
-					      prep_stmt.setFloat(4,Float.parseFloat(table.get(i, 2)));
-					      prep_stmt.setFloat(5,Float.parseFloat(table.get(i, 3)));
-					      prep_stmt.setFloat(6,Float.parseFloat(table.get(i, 4)));
-					      prep_stmt.setDouble(7,Double.parseDouble(table.get(i, 5)));
-					      prep_stmt.setDouble(8,Double.parseDouble(table.get(i, 6)));
-					      prep_stmt.setDouble(9,Double.parseDouble(table.get(i, 7)));
+					      prep_stmt.setString(2,date.toString());
+					      prep_stmt.setDouble(3,open);
+					      prep_stmt.setDouble(4,high);
+					      prep_stmt.setDouble(5,low);
+					      prep_stmt.setDouble(6,last);
+					      prep_stmt.setDouble(7,close);
+					      prep_stmt.setDouble(8,Total_Trade_Quantity);
+					      prep_stmt.setDouble(9,Turnover);
 					      prep_stmt.execute();
 					}
-			  }
+			}
 		  }
 		  
 		  catch(Exception e) {System.out.println(e);}

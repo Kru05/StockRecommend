@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cummins.stock.vo.Company;
 import com.cummins.stock.vo.History;
+import com.cummins.stock.vo.Recommend;
 import com.cummins.stock.vo.Stock;
 import com.cummins.stock.vo.UserInfo;
 
@@ -77,6 +78,126 @@ public class GreetingController {
 		  }
 		  return null;
 	}
+	@RequestMapping(value = "/recommend", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ArrayList<Recommend> recommend(@RequestParam(value = "userid") String userid, @RequestParam(value = "level") String level) {
+		
+			ArrayList <Recommend> rlist=new ArrayList<Recommend>();
+		  try
+		  {
+			  Class.forName(driver);
+			  conn=DriverManager.getConnection(DB_URL,USER,PASS);
+			  stmt=conn.createStatement();
+			  ResultSet rs=stmt.executeQuery("select * from users where userid='"+userid+"'");
+			  String risk;
+			  rs.next();
+			  risk=rs.getString("Risk");
+			  
+			  rs=stmt.executeQuery("select count(*) as Large from company where type='L'");
+			  rs.next();
+			  int l=rs.getInt("Large");
+			  rs=stmt.executeQuery("select count(*) as Med from company where type='M'");
+			  rs.next();
+			  int m=rs.getInt("Med");
+			  
+			  rs=stmt.executeQuery("select count(*) as Small from company where type='S'");
+			  rs.next();
+			  int s=rs.getInt("Small");
+			  
+			  if(risk.equalsIgnoreCase(("High")))
+				{
+					l=((l*10)/100);
+					l=(int) Math.ceil(l);
+					m=((m*30)/100);
+					m=(int) Math.ceil(m);
+					s=((s*60)/100);
+					s=(int) Math.ceil(s);
+				}
+				else if(risk.equalsIgnoreCase("Medium"))
+				{
+					l=((l*30)/100);
+					l=(int) Math.ceil(l);
+					m=((m*30)/100);
+					m=(int) Math.ceil(m);
+					s=((s*40)/100);
+					s=(int) Math.ceil(s);
+				}
+				else if(risk.equalsIgnoreCase("low"))
+				{
+					l=((l*60)/100);
+					l=(int) Math.ceil(l);
+					m=((m*30)/100);
+					m=(int) Math.ceil(m);
+					s=((s*10)/100);
+					s=(int) Math.ceil(s);
+				} 
+				  if(level.equalsIgnoreCase("basic"))
+				  {// select * from company where type='L' order by risk1 desc;	
+					  			System.out.print(l);
+					  			System.out.print("\t"+m);
+					  			System.out.print("\t"+s);
+					  			ResultSet rs12;
+				  				rs=stmt.executeQuery("select * from company where type='L' order by risk1 desc limit "+l);
+				  				while(rs.next())
+				  				{
+				  					Recommend r=new Recommend();
+				  					r.setId(rs.getInt("compno"));
+				  					r.setCode(rs.getString("code"));
+				  					r.setCompanyType(rs.getString("type"));
+				  					r.setName((rs.getString("name")));
+				  					r.setProfit(rs.getFloat("risk1"));
+				  					PreparedStatement prep_stmt;
+				  					prep_stmt=conn.prepareStatement("select Close from stocks where Code=? and date=(select max(date) from stocks)");
+				  					prep_stmt.setString(1,rs.getString("code"));
+				  					rs12=prep_stmt.executeQuery();
+				  					rs12.next();
+				  					r.setClose(rs12.getFloat("Close"));
+				  					rlist.add(r);
+				  				}
+				  				rs=stmt.executeQuery("select * from company where type='M' order by risk1 desc limit "+m);
+				  				while(rs.next())
+				  				{
+				  					Recommend r=new Recommend();
+				  					r.setId(rs.getInt("compno"));
+				  					r.setCode(rs.getString("code"));
+				  					r.setCompanyType(rs.getString("type"));
+				  					r.setName((rs.getString("name")));
+				  					r.setProfit(rs.getFloat("risk1"));
+				  					PreparedStatement prep_stmt;
+				  					prep_stmt=conn.prepareStatement("select Close from stocks where Code=? and date=(select max(date) from stocks)");
+				  					prep_stmt.setString(1,rs.getString("code"));
+				  					rs12=prep_stmt.executeQuery();
+				  					rs12.next();
+				  					r.setClose(rs12.getFloat("Close"));
+				  					rlist.add(r);
+				  				}
+				  				rs=stmt.executeQuery("select * from company where type='S' order by risk1 desc limit "+s);
+				  				while(rs.next())
+				  				{
+				  					Recommend r=new Recommend();
+				  					r.setId(rs.getInt("compno"));
+				  					r.setCode(rs.getString("code"));
+				  					r.setCompanyType(rs.getString("type"));
+				  					r.setName((rs.getString("name")));
+				  					r.setProfit(rs.getFloat("risk1"));
+				  					PreparedStatement prep_stmt;
+				  					prep_stmt=conn.prepareStatement("select Close from stocks where Code=? and date=(select max(date) from stocks)");
+				  					prep_stmt.setString(1,rs.getString("code"));
+				  					rs12=prep_stmt.executeQuery();
+				  					rs12.next();
+				  					r.setClose(rs12.getFloat("Close"));
+				  					rlist.add(r);
+				  				}
+			  					return rlist;
+				  }
+			 
+				 
+		  }
+		  catch(Exception e)
+		  {
+			  System.out.println(e);
+		  }
+		  return null;
+	}
 	@RequestMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
 	public int save(@RequestParam(value = "userid") int userid, @RequestParam(value = "code") String code,@RequestParam(value = "date") String date,@RequestParam(value = "close") double close) {
 		
@@ -99,7 +220,7 @@ public class GreetingController {
 		  }
 		return 0;
 	}
-
+	
 	@RequestMapping(value = "/getCompanyList", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ArrayList<Company> login1() {
 		ArrayList<Company> companyList = new ArrayList<Company>();
@@ -245,5 +366,4 @@ public class GreetingController {
 		companyList.add(c1);
 		return companyList;
 	}*/
-	
 }

@@ -52,13 +52,31 @@ public class LinearRegression {
 			  }
 		      simpleRegression.removeData(ctr, Double.parseDouble(name));
 		      System.out.println(simpleRegression);
-			  // querying for model parameters
-		        System.out.println("slope = " + simpleRegression.getSlope());
-		        System.out.println("intercept = " + simpleRegression.getIntercept());
+			  
+		      PreparedStatement prep_stmt1;
+		      prep_stmt1=conn.prepareStatement("select Close from stocks where Code=? and Date=(select max(Date) from stocks where Code=?");
+		      prep_stmt1.setString(1,rs.getString("code"));
+		      prep_stmt1.setString(2,rs.getString("code"));
+		      ResultSet rs2=prep_stmt.executeQuery();
+		      rs2.next();
+		      float price=rs2.getFloat("Close");
+		      float p_price=(float) simpleRegression.predict(ctr++);
+		      float profit=p_price-price;
+		      System.out.println(price);
+		      System.out.println(p_price);
+		      System.out.println(profit);
+		      prep_stmt1=conn.prepareStatement("update company set risk1=? where code=?");
+		      prep_stmt1.setString(2,rs.getString("code"));
+		      prep_stmt1.setFloat(1,profit);
+		      prep_stmt1.execute();
+		      // querying for model parameters
+		       // System.out.println("slope = " + simpleRegression.getSlope());
+		        //System.out.println("intercept = " + simpleRegression.getIntercept());
 
 		        // trying to run model for unknown data
-		        System.out.println("prediction  = " + simpleRegression.predict(ctr++));
+		       // System.out.println("prediction  = " + simpleRegression.predict(ctr++));
 		        simpleRegression.clear();
+		        //
 		  }
 	  }
 	  
