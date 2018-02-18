@@ -100,7 +100,7 @@ public class GreetingController {
 							mtotal=0.30*Double.parseDouble(total);
 							stotal=0.10*Double.parseDouble(total);
 						} 
-					  System.out.println(ltotal+" "+mtotal+" "+stotal);
+					  	System.out.println(ltotal+" "+mtotal+" "+stotal);
 						  if(level.equalsIgnoreCase("basic"))
 						  {
 							  ZeroOneKnapsack zok = new ZeroOneKnapsack((int) Math.ceil(ltotal));
