@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,286 @@ public class GreetingController {
 		Connection conn=null;
 		  Statement stmt = null;
 		  Statement stmt1 = null;
+		
+		  @RequestMapping(value = "/knapsack", produces = MediaType.APPLICATION_JSON_VALUE)
+			public List<Recommend> knapsack(@RequestParam(value = "userid") String userid, @RequestParam(value = "level") String level, @RequestParam(value = "total") String total) {
+				List<Recommend> finalList =new ArrayList<Recommend>();
+				int id=0;
+					try
+				  {
+					  Class.forName(driver);
+					  conn=DriverManager.getConnection(DB_URL,USER,PASS);
+					  stmt=conn.createStatement();
+					  ResultSet rs=stmt.executeQuery("select * from users where userid='"+userid+"'");
+					  String risk;
+					  rs.next();
+					  risk=rs.getString("Risk");
+					  
+					  rs=stmt.executeQuery("select count(*) as Large from company where type='L'");
+					  rs.next();
+					  int l=rs.getInt("Large");
+					  rs=stmt.executeQuery("select count(*) as Med from company where type='M'");
+					  rs.next();
+					  int m=rs.getInt("Med");
+					  
+					  rs=stmt.executeQuery("select count(*) as Small from company where type='S'");
+					  rs.next();
+					  int s=rs.getInt("Small");
+					  double ltotal = 0,mtotal=0,stotal=0;
+					  if(risk.equalsIgnoreCase(("High")))
+						{
+							l=((l*10)/100);
+							l=(int) Math.ceil(l);
+							m=((m*30)/100);
+							m=(int) Math.ceil(m);
+							s=((s*60)/100);
+							s=(int) Math.ceil(s);
+							ltotal=0.10*Double.parseDouble(total);
+							mtotal=0.30*Double.parseDouble(total);
+							stotal=0.60*Double.parseDouble(total);
+						}
+						else if(risk.equalsIgnoreCase("Medium"))
+						{
+							l=((l*30)/100);
+							l=(int) Math.ceil(l);
+							m=((m*30)/100);
+							m=(int) Math.ceil(m);
+							s=((s*40)/100);
+							s=(int) Math.ceil(s);
+							ltotal=0.30*Double.parseDouble(total);
+							mtotal=0.30*Double.parseDouble(total);
+							stotal=0.40*Double.parseDouble(total);
+						}
+						else if(risk.equalsIgnoreCase("low"))
+						{
+							l=((l*60)/100);
+							l=(int) Math.ceil(l);
+							m=((m*30)/100);
+							m=(int) Math.ceil(m);
+							s=((s*10)/100);
+							s=(int) Math.ceil(s);
+							ltotal=0.60*Double.parseDouble(total);
+							mtotal=0.30*Double.parseDouble(total);
+							stotal=0.10*Double.parseDouble(total);
+						} 
+					  System.out.println(ltotal+" "+mtotal+" "+stotal);
+						  if(level.equalsIgnoreCase("basic"))
+						  {
+							  ZeroOneKnapsack zok = new ZeroOneKnapsack((int) Math.ceil(ltotal));
+							  Class.forName(driver);
+							  conn=DriverManager.getConnection(DB_URL,USER,PASS);
+							  stmt=conn.createStatement();
+							  ResultSet rs11=stmt.executeQuery("select * from company where type='L' order by risk1 desc limit 30");
+							  ResultSet rs1;
+							  Statement stmt2 = conn.createStatement();
+							  while(rs11.next())
+							  {
+						    	   rs1=stmt2.executeQuery("select * from stocks where code='"+rs11.getString("code")+"' and Date=(select max(Date)from stocks)");
+						    	   rs1.next();
+						    	   zok.add(rs11.getString("code"),(int)rs1.getDouble("close"),(int)rs11.getDouble("risk1"));
+						       }
+					      
+					 
+						        // calculate the solution:
+						        List<Item> itemList = zok.calcSolution();
+						 
+						        // write out the solution in the standard output
+						        if (zok.isCalculated()) {
+						            NumberFormat nf  = NumberFormat.getInstance();
+						 
+						            System.out.println(
+						                "Maximal weight           = " +
+						                nf.format(zok.getMaxWeight()));
+						            System.out.println(
+						                "Total weight of solution = " +
+						                nf.format(zok.getSolutionWeight()));
+						            System.out.println(
+						                "Total value              = " +
+						                zok.getProfit()
+						            );
+						            System.out.println();
+						            System.out.println(
+						                "You can carry the following materials " +
+						                "in the knapsack:"
+						            );
+						            for (Item item : itemList) {
+						                if (item.getInKnapsack() == 1) {
+						                    System.out.format(
+						                        "%1$-23s %2$-3s %3$-5s %4$-15s \n",
+						                        item.getName(),
+						                        item.getWeight(), "dag  ",
+						                        "(value = " + item.getValue() + ")"
+						                    );
+						                   Statement stmt3=conn.createStatement();
+						                   Statement stmt4=conn.createStatement();
+						                   ResultSet rs2=stmt3.executeQuery("select * from company where code='"+item.getName()+"'");
+						                   ResultSet rs3=stmt4.executeQuery("select Close from stocks where Code='"+item.getName()+"' and date=(select max(date) from stocks)");
+						                   rs2.next();
+						                    rs3.next();
+						                    Recommend r=new Recommend();
+						                    id++;
+						                    r.setId(id);
+						                    r.setClose((float)rs3.getDouble("Close"));
+						                    r.setCode(item.getName());
+						                    r.setCompanyType(rs2.getString("type"));
+						                    r.setName(rs2.getString("name"));
+						                    r.setProfit(rs2.getFloat("risk1"));
+						                    finalList.add(r);
+						                }
+						            }
+						            
+						        } else {
+						            System.out.println(
+						                "The problem is not solved. " +
+						                "Maybe you gave wrong data."
+						            );
+						        }
+						        zok = new ZeroOneKnapsack((int) Math.ceil(mtotal));
+						         rs11=stmt.executeQuery("select * from company where type='M' order by risk1 desc limit 30");
+							     stmt2 = conn.createStatement();
+							       while(rs11.next())
+							       {
+							    	   rs1=stmt2.executeQuery("select * from stocks where code='"+rs11.getString("code")+"' and Date=(select max(Date)from stocks)");
+											rs1.next();
+							    	   zok.add(rs11.getString("code"),(int)rs1.getDouble("close"),(int)rs11.getDouble("risk1"));
+							       }
+							      
+							 
+							        // calculate the solution:
+							        itemList = zok.calcSolution();
+							 
+							        // write out the solution in the standard output
+							        if (zok.isCalculated()) {
+							            NumberFormat nf  = NumberFormat.getInstance();
+							 
+							            System.out.println(
+							                "Maximal weight           = " +
+							                nf.format(zok.getMaxWeight()));
+							            System.out.println(
+							                "Total weight of solution = " +
+							                nf.format(zok.getSolutionWeight()));
+							            System.out.println(
+							                "Total value              = " +
+							                zok.getProfit()
+							            );
+							            System.out.println();
+							            System.out.println(
+							                "You can carry the following materials " +
+							                "in the knapsack:"
+							            );
+							            for (Item item : itemList) {
+							                if (item.getInKnapsack() == 1) {
+							                    System.out.format(
+							                        "%1$-23s %2$-3s %3$-5s %4$-15s \n",
+							                        item.getName(),
+							                        item.getWeight(), "dag  ",
+							                        "(value = " + item.getValue() + ")"
+							                    );
+							                    Statement stmt3=conn.createStatement();
+								                   Statement stmt4=conn.createStatement();
+							                    ResultSet rs2=stmt3.executeQuery("select * from company where code='"+item.getName()+"'");
+								                   ResultSet rs3=stmt4.executeQuery("select Close from stocks where Code='"+item.getName()+"' and date=(select max(date) from stocks)");
+								                    rs2.next();
+								                    rs3.next();
+								                    Recommend r=new Recommend();
+								                    id++;
+								                    r.setId(id);
+								                    r.setClose((float)rs3.getDouble("Close"));
+								                    r.setCode(item.getName());
+								                    r.setCompanyType(rs2.getString("type"));
+								                    r.setName(rs2.getString("name"));
+								                    r.setProfit(rs2.getFloat("risk1"));
+								                    System.out.println("added"+rs2.getString("type"));
+								                    finalList.add(r);
+							                }
+							            }
+							           
+							        } else {
+							            System.out.println(
+							                "The problem is not solved. " +
+							                "Maybe you gave wrong data."
+							            );
+							        }
+							        zok = new ZeroOneKnapsack((int) Math.ceil(stotal));
+							         rs11=stmt.executeQuery("select * from company where type='S' order by risk1 desc limit 30");
+								     stmt2 = conn.createStatement();
+								       while(rs11.next())
+								       {
+								    	   rs1=stmt2.executeQuery("select * from stocks where code='"+rs11.getString("code")+"' and Date=(select max(Date)from stocks)");
+												rs1.next();
+								    	   zok.add(rs11.getString("code"),(int)rs1.getDouble("close"),(int)rs11.getDouble("risk1"));
+								       }
+								      
+								 
+								        // calculate the solution:
+								        itemList = zok.calcSolution();
+								 
+								        // write out the solution in the standard output
+								        if (zok.isCalculated()) {
+								            NumberFormat nf  = NumberFormat.getInstance();
+								 
+								            System.out.println(
+								                "Maximal weight           = " +
+								                nf.format(zok.getMaxWeight()));
+								            System.out.println(
+								                "Total weight of solution = " +
+								                nf.format(zok.getSolutionWeight()));
+								            System.out.println(
+								                "Total value              = " +
+								                zok.getProfit()
+								            );
+								            System.out.println();
+								            System.out.println(
+								                "You can carry the following materials " +
+								                "in the knapsack:"
+								            );
+								            for (Item item : itemList) {
+								                if (item.getInKnapsack() == 1) {
+								                    System.out.format(
+								                        "%1$-23s %2$-3s %3$-5s %4$-15s \n",
+								                        item.getName(),
+								                        item.getWeight(), "dag  ",
+								                        "(value = " + item.getValue() + ")"
+								                    );
+								                    Statement stmt3=conn.createStatement();
+									                   Statement stmt4=conn.createStatement();
+								                    ResultSet rs2=stmt3.executeQuery("select * from company where code='"+item.getName()+"'");
+									                   ResultSet rs3=stmt4.executeQuery("select Close from stocks where Code='"+item.getName()+"' and date=(select max(date) from stocks)");
+									                    rs2.next();
+									                    rs3.next();
+									                    Recommend r=new Recommend();
+									                    id++;
+									                    r.setId(id);
+									                    r.setClose((float)rs3.getDouble("Close"));
+									                    r.setCode(item.getName());
+									                    r.setCompanyType(rs2.getString("type"));
+									                    r.setName(rs2.getString("name"));
+									                    r.setProfit(rs2.getFloat("risk1"));
+									                    System.out.println("added"+rs2.getString("type"));
+									                    finalList.add(r);
+								                }
+								            }
+								            
+								        } 
+								        else {
+								            System.out.println(
+								                "The problem is not solved. " +
+								                "Maybe you gave wrong data."
+								            );
+								        }
+								    	return finalList;     
+							  }
+						  
+					  }
+						 
+						    catch(Exception e)
+						    {
+						    	
+						    }
+		return null;		
+	 }
+						  
+	
 	@RequestMapping("/greeting")
 	public String greeting(@RequestParam(value = "name") String name) {
 		return "hello"+name;

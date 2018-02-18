@@ -54,11 +54,11 @@ public class Main {
 				  for (final Row row : tabularResult) {
 					
 					  LocalDate date = row.getLocalDate("Date");
-					  Double open = row.getDouble("Last");
-					  Double high = row.getDouble("Last");
-					  Double low = row.getDouble("Last");
+					  Double open = row.getDouble("Open");
+					  Double high = row.getDouble("High");
+					  Double low = row.getDouble("Low");
 					  Double last = row.getDouble("Last");
-					  Double close = row.getDouble("Last");
+					  Double close = row.getDouble("Close");
 					  Double  Total_Trade_Quantity = row.getDouble("Total Trade Quantity");
 					  Double Turnover = row.getDouble("Turnover (Lacs)");
 			
