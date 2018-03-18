@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html ng-app="Sectors">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+<head lang="en">
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="HandheldFriendly" content="true">
+	<meta charset="UTF-8">
+	<title  class="tooltip">BREAD 'N' BUCKS</title>
+	<link rel="icon" type="image/png" href="C:\Users\aditi\git\BreadNBucks\src\com\cummins\demo\images\favicon.ico">
+	<link rel="stylesheet" type="text/css" href="mainpage.css">
+</head>
+
+<body >
+	<div id="container3">
+	<main>
+		<header>
+			<div class="w3-top">
+  <ul class="w3-navbar w3-white w3-wide w3-padding-8 w3-card-2">
+    <li>
+      <a class="w3-margin-left"><b><font size="4">BREAD 'N' BUCKS</font></b></a>
+    </li>
+    <!-- Float links to the right. Hide them on small screens -->
+  </ul>
+</div>
+		</header>
+		
+		<section  ng-controller="getSector as gs">
+		
+			<div class="menu">
+				<!-- Button to open the modal login form -->
+				<button onclick="document.getElementById('id01').style.display='block'" style="margin-left:70%;">LOG{{value}}</button>
+
+				<!-- The Modal -->
+				<div id="id01" class="modal">
+					<span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+
+					<!-- Modal Content -->
+					<form class="modal-content animate" >
+						<div class="imgcontainer">
+							<img src="http://www.hit4hit.org/img/login/user-icon-6.png" alt="Login Image" class="avatar">
+						</div>
+
+						<div class="container" >
+							<label><b></b></label>
+								<input type="text" placeholder="Enter Email-id" id="uname" required><br>
+
+							<label><b></b></label>
+								<input type="password" placeholder="Enter Password" id="psw" required><br>
+
+							<button type="submit" ng-click="gs.login()"> LOG{{value}}</button><br>
+		
+						</div>
+
+						<div class="containercan" >
+				
+							<button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+							
+						</div>
+					</form>
+				</div>
+			</div>
+		
+		
+			   <div id="nav-wrapper">
+				<ul class="tab tab-pane fade in active">              
+					<li><a ng-click="gs.select(1)"><b>HOME</b></a></li>
+					<li><a ng-click="gs.select(2)"><b>MY PAGE</b></a><li>
+					<li><a ng-click="gs.select(3)"><b>SIGN UP</b></a></li>
+					<li><a ng-click="gs.select(4)"><b>ABOUT</b></a></li>
+					
+					<!--<div class="dropdown">
+					<li><a> SECTORS &#9662;</a>
+						<ul>
+						  <div class="dropdown-content">
+							<li ng-repeat="item in content" ng-click="gs.submit(item.name,item.symbol,'http://localhost:8080/RestDemoService/securityDisplay')"><a><t>{{item.name}}</t><br><t>{{item.symbol}}</t></a><br></li>
+							<li> Sector 1</li>
+							<li> Sector 2</li>
+							</ul>
+						</div>
+					</li>
+					</div> -->
+			</div>	
+
+				<marquee class="marquee" scrollamount="4">Welcome to Bread N Bucks!    Use John Doe's Philosophies that reflect the latest academic research Because MONEY doesn't come with INSTRUCTIONS!</marquee>
+				
+				<div id="home">
+					<img class="bckimg" src="http://maxpixel.freegreatpicture.com/static/photo/1x/Laptop-Glasses-Coffee-Bag-Pen-Notebook-Iphone-1478822.jpg" alt="Sectors">
+					
+					<h2 style="color:white;">CREATE WEALTH <br />NOT JUST PROFIT</h2>
+
+					<input type="button" class="dropdown" value="Sectors"
+					/>
+					
+					<div class="dropdown" >											
+						  <div class="dropdown-content"  >
+							<li class="tooltip" ng-repeat="item in content" ng-click="gs.submit(item.name,item.symbol,'http://localhost:8080/RestDemoService/securityDisplay')"><a><t>{{item.name}}</t> --- <t>{{item.symbol}}</t></a><span>Click to get the predictions </span></li>
+<!-- 							<li class="tooltip"> Sector 1<span> This is a tooltip</span></li> -->
+<!-- 							<li> Sector 2</li> -->
+							
+						</div>					
+					</div>	
+					<div class="homeinfo">
+				<p>The stock market is no less than a roller coaster ride , but our customers come out ahead. You don't need to be a mastermind or read a thousand books. An ordinary individual investor can win the game. You just need to have the right information at the right time. Mind you, timing's a bitch! That's where we step in. We provide stock predictions that can reap you the benefit. Imagine where you might be in future if you continue following our stock forecasts.
+				<br>
+				<br>
+				</p>
+		</div> 
+		<div  class="sector">
+	    <h3>HOW THIS WILL HELP YOU?</h3>
+	    <p>•	Make a prediction to access the valuable information we have for you</p>
+	    <p>•    Get practice predicting stocks.</p>
+	    <p>•	Look at the sentiment poll results for stocks you are interested in</p>
+	    <p>•	Access actionable daily stock forecasts</p>
+	    
+	    </div>
+					
+				</div>
+				
+									
+<div class="form">  
+        <div id="signup" class="Sgn"> 
+		
+          <h1>Sign Up for Free</h1>
+          
+          <form  method="post">
+          
+          <div class="top-row">
+            <div class="field-wrap">
+              <label>First Name<span class="req">*</span>
+              </label>
+              <input type="text" required autocomplete="off" id="fname"/>
+            </div>
+        
+            <div class="field-wrap">
+              <label>Last Name<span class="req">*</span>
+              </label>
+              <input type="text"required autocomplete="off" id="lname"/>
+            </div>
+          </div>
+		  
+		  <div class="field-wrap">
+            <label>Mobile Number<span class="req">*</span>
+            </label>
+            <input type="phone" id="phone"/>
+         </div>
+         
+		<div class="field-wrap">
+            <label>Email Address<span class="req">*</span>
+            </label>
+            <input type="email"required autocomplete="off" id="eid"/>
+         </div> 
+          
+          <div class="field-wrap">
+            <label>Set A Password<span class="req">*</span>
+            </label>
+            <input type="password"required autocomplete="off" id="passwd"/>
+          </div>
+          
+          <button type="button" class="button button-block" ng-click="gs.signup()">Get Started</button>
+		</div>
+		
+          
+          </form><!-- /form -->
+
+        </div><!-- tab-content -->
+        
+
+
+
+<!-- /MY PAGE -->
+	<div id="sector" class="mysec">
+
+	
+		<table class="sectab" border=1>
+			<tr><th>COMPANY CODE</th><th>CURRENT RATE</th>
+			<th colspan=6>STATISTICS</th><th>VOLUME</th><th>STATUS</th><th width=100>SAVE</th></tr>
+			<tr> <td> </td><td> </td><td>EPS</td><td>AVERAGE PRICE</td><td>DAY HIGH</td><td>DAY LOW</td><td>FACEVALUE</td><td>TOTAL TRADED VOLUME</td><td></td> <td> </td><td> </td></tr>
+			
+<!-- 			<tr> <td> </td><td> </td> <th colspan=6>BUY STOCK</th>  <td> </td><td> </td> </tr> -->
+			
+			
+			
+			
+			<tr ng-repeat="sec in prediction.buyStock">
+				<th id="code">{{sec.code}}</th>
+				<td id="price">{{sec.lastPrice}} </td>
+				<td> {{sec.eps}}</td><td>{{sec.averagePrice}}</td><td> {{sec.dayHigh}}</td><td>{{sec.dayLow}}</td><td> {{sec.faceValue}}</td><td> {{sec.totalTradedVolume}}</td> </td>
+			<td><form >
+					<input id="quant1" type="number" name="quantity" min="1" max="2500">
+					</form>
+				
+				</td>
+			
+
+				<td id="status1" >BUY</td>
+				<td><button class="savebtn" ng-click="gs.savedata(sec.code,sec.averagePrice)">SAVE</button></td>
+			</tr>
+			
+<!-- 			<tr> <td> </td><td> </td> <th colspan=6>SELL STOCK</th>  <td> </td><td> </td> -->
+			
+			<tr ng-repeat="sec in prediction.sellStock">
+				<th id="code">{{sec.code}}</th>
+				<td id="price">{{sec.lastPrice}} </td>
+				<td>{{sec.eps}}</td><td> {{sec.averagePrice}}</td><td> {{sec.dayHigh}}</td><td>{{sec.dayLow}}</td><td>{{sec.faceValue}}</td><td> {{sec.totalTradedVolume}}</td> 
+					<td><form >
+					<input id="quant" type="number" name="quantity" min="1" max="2500">
+					</form>
+				
+				</td>
+				
+				<td id="status" >SELL</td>
+				<td><button  class="savebtn" ng-click="gs.savedata(sec.code,sec.averagePrice)">SAVE</button></td>
+			</tr>
+		</table>
+		<table class="companies" border=1>
+			<tr><th>SECTORS</th><th>CONSTITUENTS</th></tr>
+			<tr><td >Cigarettes</td><td>ITC</td><tr>
+			<tr><td rowspan=6>Pharmaceuticals</td><td>Cipla</td><tr>
+			<tr><td>Dr. Reddy’s Lab</td></tr>
+			<tr><td>Lupin</td></tr>
+			<tr><td>Sun Pharmaceutical</td></tr>
+			<tr><td>Aurobindo Pharma</td></tr>
+			
+			<tr><td rowspan=6>Information Technology</td><td>HCL Technologies</td><tr>
+			<tr><td>Infosys</td></tr>
+			<tr><td>TCS</td></tr>
+			<tr><td>Tech Mahindra</td></tr>
+			<tr><td>Wipro</td></tr>
+			
+			<tr><td rowspan=5>Cements</td><td>ACC</td><tr>
+			<tr><td>Ambuja Cements</td></tr>
+			<tr><td>Grasim Industries</td></tr>
+			<tr><td>UltraTech Cement</td></tr>
+			
+			<tr><td rowspan=9>Automobile</td><td>Bajaj Auto</td><tr>
+			<tr><td>Bosch</td></tr>
+			<tr><td>Hero MotoCorp</td></tr>
+			<tr><td>Mahindra & Mahindra</td></tr>
+			<tr><td>Maruti Suzuki</td></tr>
+			<tr><td>Eicher Motors</td></tr>
+			<tr><td>Tata Motors</td></tr>
+			<tr><td>Tata Motors Ltd.(DVR)</td></tr>
+			
+			<tr><td rowspan=10>Financial Services</td><td>Axis Bank</td><tr>
+			<tr><td>Bank of Baroda</td></tr>
+			<tr><td>HDFC</td></tr>
+			<tr><td>HDFC Bank</td></tr>
+			<tr><td>ICICI Bank</td></tr>
+			<tr><td>IndusInd Bank</td></tr>
+			<tr><td>Kotak Mahindra Bank</td></tr>
+			<tr><td>State Bank of India</td></tr>
+			<tr><td>Yes Bank</td></tr>
+		
+			<tr><td rowspan=4>Metals</td><td>Coal India</td><tr>
+			<tr><td>Hindalco Industries</td></tr>
+			<tr><td>Tata Steel</td></tr>
+			
+			<tr><td rowspan=8>Energy</td><td>BPCL</td><tr>
+			<tr><td>GAIL (India)</td></tr>
+			<tr><td>NTPC</td></tr>
+			<tr><td>ONGC</td></tr>
+			<tr><td>Reliance Industries</td></tr>
+			<tr><td>Tata Power</td></tr>
+			<tr><td>Power Grid</td></tr>
+			
+			<tr><td rowspan=4>Telecom</td><td>Bharti Airtel</td><tr>
+			<tr><td>Idea Cellular</td></tr>
+			<tr><td>Bharti Infratel</td></tr>
+			
+			<tr><td rowspan=3>Consumer Goods</td><td>Asian Paints</td><tr>
+			<tr><td>Hindustan Unilever</td></tr>
+			
+			<tr><td>Construction</td><td>Larsen & Toubro</td><tr>
+			
+			<tr><td>Industrial Manufacturing</td><td>BHEL</td><tr>
+		
+			<tr><td>Media & Entertainment</td><td>Zee Entertainment</td><tr>
+		
+			<tr><td>Shipping</td><td>Adani Ports and Special Economic Zone Ltd.</td><tr>
+		
+		
+		</table>	
+		</table>
+		
+	</div>	
+
+	<div id="mypage" class="mypagetable">
+<!-- 		<img class="bckimg" href="http://maxpixel.freegreatpicture.com/static/photo/1x/Laptop-Glasses-Coffee-Bag-Pen-Notebook-Iphone-1478822.jpg"> -->
+		<br></br>
+		<h1>HELLO {{cont.login.first_name}}<h1>
+		<table border=1>
+			<tr><th>COMPANY NAME</th><th>CURRENT RATE</th><th>STATUS</th><th>VOLUME</th> <th>LAST UPDATE DATE</th></tr>
+			<tr ng-repeat="cont in cont.savedetail"> <td>{{cont.securityCode}}</td><td>{{cont.curr_price}}</td> <td>{{cont.status}}</td><td>{{cont.volume}}</td> <td>{{cont.last_update_date}}</td></tr>
+		</table>
+		
+	</div>
+	
+	<div id="aboutpage">
+		<section  class="about">
+		<h3>ABOUT</h3>
+		<p>National Stock Exchange has a total market capitalization of more than US$1.41 trillion, making it the world’s 12th-largest stock exchange as of March 2016. The National Stock Exchange of India Limited (NSE) is the leading stock exchange of India, located in Mumbai.Nifty is a major stock index in India introduced by the National stock exchange. The NSE is situated at Delhi. The Sensex and Nifty are both Indices. The Sensex, also called the BSE 30, is a stock market index of 30 well-established and financially sound companies listed on Bombay Stock Exchange (BSE). The Nifty, similarly, is an indicator of the 50 top major companies on the National Stock Exchange (NSE).
+		The Nifty 50 was a group of 50 stocks that were most favored by institutional investors in the 1960s and 1970s.
+		Companies in this group were usually characterized by consistent earnings growth and high P/E ratios.	
+		</p></section>
+		
+		<section class="image">
+		<img src="http://blogs-images.forbes.com/jackzenger/files/2012/03/three_women_working-1.jpg">
+		</section>
+		
+		<section class="sector">
+		<h3>OUR RECIPE</h3>
+		<p>•	First, we harness the data for each sector.</p>
+		<p>•	The data we collect is just the raw material for our complex analysis.</p>
+		<p>•	Take our customer's order (the sector)</p>
+		<p>•	Goes straight to the chef for further processing!</p>
+	    <p>•	Add a pinch of prediction algorithms.</p>
+	    <p>•	Tada! your dish is ready. Make the best out of it!</p>
+	    </section>
+	    
+	    <section>
+		<h3>OUR TEAM</h3>
+		<p> <b>Arunima Chaurasia &nbsp;&nbsp;&nbsp;	 Agatha Chatterjee&nbsp;&nbsp;&nbsp;	Aishwarya Katkar&nbsp;&nbsp;&nbsp;	Aditi Sharma&nbsp;&nbsp;&nbsp;	Aishwarya Sharma</b>
+		<br>
+		<br>
+		</p>
+	    </section>
+	    
+	    
+	</div>
+	
+
+	
+		</section>
+<!-- 		<div class="widget" id="wid"> -->
+					
+<!-- 			<script type="text/javascript"> var _mcq=["6",""];</script> -->
+<!-- 			<span id='_mc_mg6'></span> -->
+<!-- 			<script language="JavaScript" src="http://stat1.moneycontrol.com/mcjs/common/mc_widget.js"></script> -->
+<!-- <!-- 			<noscript> --> -->
+<!-- <!-- 			<a href="http://www.moneycontrol.com">Sensex/Nifty</a> --> -->
+<!-- <!-- 			</noscript> --> -->
+					
+<!-- 		</div> -->
+
+		
+	</main>
+<!-- 	<footer> -->
+<!-- 		<p> -->
+<!-- 			*DISCLAIMER: -->
+<!-- 		</p> -->
+	
+<!-- 	</footer> -->
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js">
+	</script>
+	
+	<script src="mainpagejs.js"></script>
+	</div>
+</body>
+</html>

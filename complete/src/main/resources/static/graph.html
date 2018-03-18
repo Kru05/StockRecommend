@@ -1,0 +1,46 @@
+<html>
+<head>
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <!-- jquery -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.js"></script>
+</head>
+<body>
+<!-- Plotly chart will be drawn inside this DIV -->
+<div id="myDiv" ng-app="myApp" ng-controller="myController" style="width: 100%; height: 500px;"></div>
+  <script>
+  var myApp = angular.module('myApp', []);
+
+  myApp.controller('myController', ['$scope','$http', function ($scope,$http) {
+  $http.get('http://192.168.43.17:8090/stockGraph?start=2018-02-02&end=2018-02-30&code=PVR')
+	.then(function(response) {
+		$scope.content = response.data;
+		 var data = [
+			  {
+			    x: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+			    y: $scope.content,
+			    type: 'scatter'
+			  }
+			];
+			var layout = {
+			  autosize: false,
+			  width: 500,
+			  height: 500,
+			  margin: {
+			    l: 50,
+			    r: 50,
+			    b: 100,
+			    t: 100,
+			    pad: 4
+			  },
+			  paper_bgcolor: '#7f7f7f',
+			  plot_bgcolor: '#c7c7c7'
+			};
+			Plotly.newPlot('myDiv', data, layout);
+	});
+  } ]
+  );
+  </script>
+</body>
+</html>
