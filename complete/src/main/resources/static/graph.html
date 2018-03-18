@@ -13,7 +13,7 @@
   var myApp = angular.module('myApp', []);
 
   myApp.controller('myController', ['$scope','$http', function ($scope,$http) {
-  $http.get('http://192.168.43.17:8090/stockGraph?start=2018-02-02&end=2018-02-30&code=PVR')
+  $http.get('http://192.168.43.17:8090/stockGraph?code=PVR')
 	.then(function(response) {
 		$scope.content = response.data;
 		 var data = [
@@ -26,7 +26,7 @@
 			var layout = {
 			  autosize: false,
 			  width: 500,
-			  height: 500,
+			  height: 500,s
 			  margin: {
 			    l: 50,
 			    r: 50,

@@ -183,7 +183,14 @@
     			$http.get('http://192.168.43.17:8090/knapsack',{params:{userid:id,level:lvl,total:tot}})
 				.then(function(response) {
 				$scope.content = response.data;
-		});}
+		});};
+		
+		$scope.openGraph = function(company){
+			$scope.code=company.name;
+			alert($scope.code);
+			
+		};
+		
 		$scope.save = function (content) {
           
             angular.forEach(content, function (value, key) {

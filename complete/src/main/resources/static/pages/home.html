@@ -29,7 +29,7 @@ body {
   box-sizing: border-box;
   padding: 40px;
   width: 800px;
-  height: 400px;
+  height: 40px;
 }
 table, td {
   border: 1px solid grey;
@@ -114,6 +114,8 @@ h5 {
 			   <td><input type="checkbox" ng-model="x.selected"
                 ng-true-value="'{{x.name}}'" ng-false-value="''"
                 id="'{{x.name}}'" /></td>
+                <td><input type="button" ng-click="openGraph(x);" ng-model="x.show" value="Show Graph"
+                id="'{{x.code}}'"/></td>
 			</tr>
 			</table>
 			<p>L:Large Cap M:Medium Cap S:Small Cap</p><br/>
