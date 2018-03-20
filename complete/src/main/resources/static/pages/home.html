@@ -1,0 +1,138 @@
+<style>
+ @import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500);
+body {
+  margin: 0;
+  padding: 0;
+  background: #DDD;
+  font-size: 16px;
+  color: #222;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
+#login-box {
+  position: relative;
+  margin: 5% auto;
+  width: 1200px;
+  
+  background: #FFF;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  min-height: 100px;
+	overflow: hidden;
+}
+
+.center {
+  position: absolute;
+  top: 65px;
+  left: 300px;
+  box-sizing: border-box;
+  padding: 40px;
+  width: 800px;
+  height: 40px;
+}
+table, td {
+  border: 1px solid grey;
+  border-collapse: collapse;
+  padding: 25px;
+}
+p
+{
+text-align: center;
+}
+.button { margin:auto;
+  display:block;
+  background-color: #000018;
+  border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+   }
+   .button1 { position: absolute;
+  top: 35px;
+  left: 600px;
+  display:block;
+  background-color: #000018;
+  border: none;
+    color: white;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+   }
+th {
+    background-color: #000018;
+    color: white;
+    font-size: 20px;
+     font-family: 'Roboto', sans-serif;
+     text-align: center;
+     padding:10px;
+}
+table tr:nth-child(odd) {
+  background-color: #f1f1f1;
+  text-align: center;
+}
+table tr:nth-child(even) {
+  background-color: #ffffff;
+  text-align: center;
+}
+h5 {
+  position: absolute;
+  top: 5px;
+  left: 1000px;
+  text-align: right;
+  margin: 0 0 20px 0;
+  font-weight: 300;
+  font-size: 20px;
+  font-family: 'Roboto', sans-serif;
+}
+
+</style>
+<div id="login-box">
+<div id="graph-container" ng-hide="gr.hide" 
+	style="width: 600px;height: 500px;display: block;position: absolute;z-index: 10;top: 20%;left: 25%;background: #fff;border: 1px solid #000;border-radius: 5px;">
+	<span style="float: right;margin: 5px; cursor:pointer;" ng-click="gr.hide=true">x</span>
+	<div id="graph-container-title">Graph for {{gr.company}}</div>
+	<div id="graph-container-chart"></div>
+</div>
+	<br/><br/><h5>Welcome , {{logged_username}}</h5>
+	<form >
+    		<div class="center">
+    		Select Level :<select ng-model="level" ng-options="opt as opt for opt in levels" ng-init="level='Basic'"></select>
+    		Enter Total Amount: <input type="text" ng-model="total" align="center" />
+   			<button type="submit" class="button1" ng-click="show=!show; savebutton=!savebutton; recommend()" align="center">Submit</button></div>
+   			<br/><br/><br/><br/>
+			<p style="text-align:right">
+			<input style="position: absolute;right: 70px" type="checkbox" ng-click="selectAll(content);" ng-model="selectall"  ng-true-value="true" ng-false-value="false" id="isSelected"/>Select All
+</p>
+			<table align="center" ng-show="show"><br/><br/>
+				<tr>
+					<th>Sr.No.</th>
+					<th>Name of Company</th>
+					<th>Type of Company</th>
+					<th>Current Stock Value</th>
+					<th>Predicted Profit</th>
+					<th>Check to save/delete</th>
+					<th>Actions</th>
+				</tr>
+	  			<tr ng-repeat="x in content">
+				   <td>{{ $index + 1 }}</td>
+				   <td>{{ x.name }}</td>
+				   <td>{{ x.companyType }}</td>
+				   <td>{{ x.close }}</td>
+				   <td>{{ x.profit }}</td>
+				   <td><input type="checkbox" ng-model="x.selected"
+	                ng-true-value="'{{x.name}}'" ng-false-value="''"
+	                id="'{{x.name}}'" /></td>
+	                <td><input type="button" ng-click="openGraph(x);" ng-model="x.show" value="Show Graph"
+	                id="'{{x.code}}'"/></td>
+				</tr>
+			</table>
+			<p><br/><br/>L:Large Cap M:Medium Cap S:Small Cap</p><br/>
+			<button class="button" ng-click="save(content)" ng-show="savebutton" align="center">Save Selected Companies</button>
+			<br/><br/>
+			
+	</form>
+</div>

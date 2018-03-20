@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<!-- define angular app -->
+<html >
+
+<head>
+  <!-- SCROLLS -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
+
+  <!-- SPELLS -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-route.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-animate.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-sanitize.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script defer src="http://use.fontawesome.com/releases/5.0.0/js/all.js"></script>
+     <script defer src="http://use.fontawesome.com/releases/5.0.0/js/v4-shims.js"></script>
+    <script src="script.js"></script>
+    </head>
+
+<!-- define angular controller -->
+<body ng-app="scotchApp">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container" >
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#/">Risk based Stock Recommendation</a>
+      </div>
+
+      <ul class="nav navbar-nav navbar-right">
+      	<li ng-hide="loginid"!=0><a href="#/"><i class="fa fa-sign-in"></i>Login</a></li>
+      	<li ng-hide="loginid"!=0><a href="#signup"><i class="fa fa-user"></i>Sign Up</a></li>
+        <li ng-show="loginid"!=0 ><a href="#home"><i class="fa fa-home" ></i> Home</a></li>
+        <li ng-show="loginid"!=0 ><a href="#history"><i class="fa fa-bookmark"></i> History</a></li>
+         <li ng-show="loginid"!=0 ><a href="#update"><i class="fa fa-refresh"></i> Update Profile</a></li>
+        <li><a href="#about"><i class="fa fa-exclamation-circle"></i> About</a></li>
+         <li ng-show="loginid"!=0><a href="#logout"><i class="fa fa-sign-out"></i>Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div id="main">
+  
+    <!-- angular templating -->
+		<!-- this is where content will be injected -->
+    <div ng-view></div>
+    
+  </div>
+  
+</body>
+
+</html>
